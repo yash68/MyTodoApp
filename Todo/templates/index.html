@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	{% if user.is_authenticated %}
+	<center><h2><b> Welcome {{user}}</b></h2></center>
+<br>
+<br><center><h3>TODO List</h3></center>
+	{% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-info">
+    <strong>{{message}}</strong>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+	{% for i in list %}
+	<pre>
+	<b>Title -</b>{{i.title}}
+	<b>Date -</b>{{i.date}}
+	<b>Details -</b>{{i.details}}</pre>
+	<form action="/del/{{i.id}}" method="POST" style=" padding-right: 4%; padding-bottom: 3%;">
+          {% csrf_token %}
+          <button value="remove" type="submit"  class="btn btn-primary" style="float: right;"> remove</button>
+        </form>
+    {% endfor%}
+<pre>
+<form  method="POST">
+{% csrf_token %}
+{{forms}}
+
+<input type="submit" value="submit" />
+      
+      </form></pre>
+<a href=" {% url 'logout' %}"> Logout </a>
+{% else %}
+<center>
+<h2>Welcome to my Todo app</h2></center>
+<h3>
+<pre>	
+<b><a href="{% url 'register' %}">Register</a>
+
+<a href="{% url 'login' %}">Login </a></b>
+</pre>
+</h3>
+{% endif %}
+
+
+</body>
+</html>
