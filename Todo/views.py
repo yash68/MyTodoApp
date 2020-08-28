@@ -7,17 +7,24 @@ from .models import TodoModel
 from .forms import TodoForm
 # Create your views here.
 def index(request):
-	item_list = TodoModel.objects.order_by("-date")
-	if request.method == "POST":
-		form = TodoForm(request.POST)
-		if form.is_valid():
-			form.save()
-			return redirect('index')
-	form = TodoForm()
-	page = { 
+	page = {}
+	if request.user.is_authenticated:
+		item_list = TodoModel.objects.filter(usr = request.user).order_by("-date")
+		if request.method == "POST":
+			try:
+				a = TodoModel.objects.create(usr = request.user)
+				form  = TodoForm(request.POST, instance = a)
+				form.save()
+				return redirect('index')
+			except Model.DoesNotExist:
+				form  = TodoForm(request.POST)
+				form.save()
+				return redirect('index')
+	
+		form = TodoForm()
+		page = { 
              "forms" : form, 
-             "list" : item_list, 
-             "title" : "TODO LIST", 
+             "list" : item_list,  
            }
 	return render(request, 'index.html', page)
 
