@@ -64,3 +64,6 @@ def logout(request):
 	auth_logout(request)
 	#messages.info(request, "Logged out successfully!")
 	return redirect('index')
+
+def userprofile(request):
+	return render(request, "userprofile.html")
